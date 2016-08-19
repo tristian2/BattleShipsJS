@@ -10,9 +10,9 @@ http://stackoverflow.com/questions/31071172/how-do-i-debug-html-and-javascript-t
 
 Open node.js console
 > npm install -g live-server
-![Alt text](/tristian2/BattleShipsJS/master/document/lightServer.png?raw=true "npm install")
+![Alt text](https://github.com/tristian2/BattleShipsJS/blob/master/document/lightServer.png?raw=true "npm install")
 
 Pretty awesome, we have atom and live refresh via the web server!
-![Alt text](/tristian2/BattleShipsJS/master/document/nodeinstall.png?raw=true "Electron and update")
+![Alt text](https://github.com/tristian2/BattleShipsJS/blob/master/document/nodeinstall.png?raw=true "Electron and update")
 
 
