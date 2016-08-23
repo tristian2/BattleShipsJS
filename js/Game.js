@@ -19,6 +19,7 @@ TrisCorp.BattleShips.Game = function() {
       ocean = new TrisCorp.BattleShips.Ocean();
       ocean.placeAllShipsRandomly()
       //useful for tracing or cheating!
-      console.log (ocean.ships);
+      //console.log (ocean.ships);
+      console.log (ocean.getShipArray());
   }
 }(); // or TrisCorp.BattleShips.Game();
