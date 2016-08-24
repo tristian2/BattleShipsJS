@@ -22,204 +22,209 @@ TrisCorp.BattleShips.Ship = function() {
     /* error getShipType: function() {
         return this.shipType;
     }*/
+
+    /* abstract Ship class***********************/
+
+    this.isSunk = function() {
+        return this.sunk;
+    };
+    this.setSunk = function(sunk) {
+        this.sunk = sunk;
+    };
+    this.isHorizontal = function() {
+        return this.horizontal;
+    };
+    this.setHorizontal = function(horizontal) {
+        this.horizontal = horizontal;
+    };
+    this.getBowRow = function() {
+        return this.bowRow;
+    };
+    this.setBowRow = function(row) {
+        this.bowRow = row;
+    };
+    this.getBowColumn = function() {
+        return this.bowColumn;
+    };
+    this.setBowColumn = function(column) {
+        this.bowColumn = column;
+    };
+    this.getShipType = function() {
+        return this.shipType;
+    };
+    this.getLength = function() {
+        return this.length;
+    };
+    this.getHit = function() {
+        return this.hit;
+    };
+    this.determineIfShipIsSunk = function() {
+        //todo
+        var length = this.getLength()-1;
+        //todo sunk = this.hit[0..length].every();
+        return this.sunk;
+    };
+    this.toString = function() {
+        return this.string;
+    };
+    this.placeShipAt = function(row,column,horizontal,ocean) {
+        this.setHorizontal(horizontal);
+        var placed = false;
+        while (!placed) {
+            var valid = this.okToPlaceShipAt(row, column, horizontal, ocean); //todo
+            if (valid) {
+              this.placeOnBoard(row, column, horizontal, ocean); //todo
+              placed = true;
+            } else {
+              row = ocean.aRandomRow(horizontal, this.getLength(), ocean); //todo
+              column = ocean.aRandomColumn(horizontal, this.getLength(), ocean); //todo
+            }
+        }
+    };
+    this.okToPlaceShipAt = function(row, column, horizontal, ocean) {
+        var valid = true;
+
+        if (ocean.getFirstShip()) {
+            ocean.setFirstShip(false);
+            return valid;
+        }
+
+        if (!this.isEmpty(row, column, horizontal, ocean)) {
+            valid = false;
+            return valid;
+        }
+
+        //Ship[][] ships = ocean.getShipArray() //todo
+        ships = ocean.shipsBoard;
+
+        for (var i = 0; i < this.getLength(); i++) {
+            if (horizontal) {
+              try {
+                if (ocean.shipsBoard[row][column + i].getShipType() != 'EmptySea') {
+                    valid = false;
+                    return valid;
+                }
+              } catch(e) {
+                return false;
+              }
+            } else {
+              try {
+                if (ocean.shipsBoard[row + i][column].getShipType() != 'EmptySea') {
+                    valid = false;
+                    return valid;
+                }
+              } catch(e) {
+                return false;
+              }
+            }
+        }
+        return valid;
+    };
+
+    this.isEmpty = function(row, column, horizontal, ocean) {
+        //todo Ship[][] ships = ocean.getShipArray()
+        ships = ocean.shipsBoard;
+        length = this.getLength();
+        empty = true;
+        peekRow = row - 1;
+        peekColumn = column - 1;
+
+        if (horizontal) {
+            while (peekRow < row + 2) {
+                try {
+                    while (peekColumn < column + length + 2) {
+                        try {
+                            if (ships[peekRow][peekColumn].getShipType() != 'EmptySea') {
+                                empty = false;
+                            }
+                            peekColumn++;
+                        }
+                        // todocatch (ArrayIndexOutOfBoundsException aoobe) {
+                        catch (e) {
+                            //might be at the edge, increment anyway
+                            peekColumn++;
+                        }
+                    }
+                    peekColumn = column - 1;
+                    peekRow++;
+                }
+                //catch (ArrayIndexOutOfBoundsException aoobe) {
+                catch (e) {
+                    //might be at the edge, increment anyway
+                    peekRow++;
+                }
+            }
+        }
+        else {
+            //vertical
+            while (peekRow < row + length + 1) {
+                try {
+                    while (peekColumn < column + 2) {
+                        try {
+                            if (ships[peekRow][peekColumn].getShipType() != 'EmptySea') {
+                                empty = false;
+                            }
+                            peekColumn++;
+                        }
+                        //catch (ArrayIndexOutOfBoundsException aoobe) {
+                        catch (e) {
+                            //might be at the edge, increment anyway
+                            peekColumn++;
+                        }
+                    }
+                    peekColumn = column - 1;
+                    peekRow++;
+                }
+                //catch (Exception ex) {
+                catch (e) {
+                    //might be at the edge, increment anyway
+                    peekRow++;
+                }
+            }
+        }
+        return empty;
+    };
+
+    this.placeOnBoard = function(row, column, horizontal, ocean) {
+        //todo Ship[][] ships = ocean.getShipArray()
+        ships = ocean.shipsBoard;
+        this.setBowRow(row);
+        this.setBowColumn(column);
+
+        for (var i = 0; i < this.getLength(); i++) {
+            if (horizontal) {
+                ships[row][column + i] = this;
+            } else {
+                ships[row + i][column] = this;
+            }
+        }
+    };
+
+    this.shootAt = function(row, column) {
+        //if row and column part of ship
+        directHit = false;
+
+        if (this.horizontal) {
+            for (var i = 0; i < this.getLength(); i++) {
+                if ((this.bowRow == row) && (this.bowColumn + i == column)) {
+                    directHit = true;
+                    this.hit[i] = true;
+                }
+            }
+        } else {
+            for (var i = 0; i < this.getLength(); i++) {
+                if ((this.bowRow + i == row) && (this.bowColumn == column)) {
+                    directHit = true;
+                    this.hit[i] = true;
+                }
+            }
+        }
+        this.setSunk(this.determineIfShipIsSunk());
+        return directHit;
+    };
+
 };
-/* abstract Ship class***********************/
-TrisCorp.BattleShips.Ship.prototype.isSunk = function() {
-    return this.sunk;
-}
-TrisCorp.BattleShips.Ship.prototype.setSunk = function(sunk) {
-    this.sunk = sunk;
-}
-TrisCorp.BattleShips.Ship.prototype.isHorizontal = function() {
-    return this.horizontal;
-}
-TrisCorp.BattleShips.Ship.prototype.setHorizontal = function(horizontal) {
-    this.horizontal = horizontal;
-}
-
-TrisCorp.BattleShips.Ship.prototype.getBowRow = function() {
-    return this.bowRow;
-}
-TrisCorp.BattleShips.Ship.prototype.setBowRow = function(row) {
-    this.bowRow = row;
-}
-TrisCorp.BattleShips.Ship.prototype.getBowColumn = function() {
-    return this.bowColumn;
-}
-TrisCorp.BattleShips.Ship.prototype.setBowColumn = function(column) {
-    this.bowColumn = column;
-}
-
-TrisCorp.BattleShips.Ship.prototype.getShipType = function() {
-    return this.shipType;
-}
-TrisCorp.BattleShips.Ship.prototype.getLength = function() {
-    return this.length;
-}
-TrisCorp.BattleShips.Ship.prototype.getHit = function() {
-    return this.hit;
-}
-
-TrisCorp.BattleShips.Ship.prototype.determineIfShipIsSunk = function() {
-  //todo
-  debugger;
-  var length = this.getLength()-1;
-  //todo sunk = this.hit[0..length].every();
-  return sunk;
-}
-
-
-TrisCorp.BattleShips.Ship.prototype.toString = function() {
-    return this.string;
-}
-
-TrisCorp.BattleShips.Ship.prototype.placeShipAt = function(row,column,horizontal,ocean) {
-  this.setHorizontal(horizontal);
-  var placed = false;
-  while (!placed) {
-    var valid = this.okToPlaceShipAt(row, column, horizontal, ocean); //todo
-    if (valid) {
-       this.placeOnBoard(row, column, horizontal, ocean); //todo
-       placed = true;
-    } else {
-       row = ocean.aRandomRow(horizontal, this.getLength()); //todo
-       column = ocean.aRandomColumn(horizontal, this.getLength()); //todo
-    }
-  }
-}
-
-TrisCorp.BattleShips.Ship.prototype.okToPlaceShipAt = function(row, column, horizontal, ocean) {
-    var valid = true;
-
-    if (ocean.getFirstShip()) {
-        ocean.setFirstShip(false)
-        return valid;
-    }
-
-    if (!isEmpty(row, column, horizontal, ocean)) {
-        valid = false;
-        return valid;
-    }
-
-    //Ship[][] ships = ocean.getShipArray() //todo
-
-    for (var i = 0; i < this.getLength(); i++) {
-        if (horizontal) {
-            if (ocean.ships[row][column + i].getShipType() != 'EmptySea') {
-                valid = false;
-                return valid;
-            }
-        } else {
-            if (ocean.ships[row + i][column].getShipType() != 'EmptySea') {
-                valid = false;
-                return valid;
-            }
-        }
-    }
-    return valid;
-}
-
-TrisCorp.BattleShips.Ship.prototype.isEmpty = function(row, column, horizontal, ocean) {
-    //todo Ship[][] ships = ocean.getShipArray()
-    length = this.getLength();
-    empty = true;
-    peekRow = row - 1;
-    peekColumn = column - 1;
-
-    if (horizontal) {
-        while (peekRow < row + 2) {
-            try {
-                while (peekColumn < column + length + 2) {
-                    try {
-                        if (ships[peekRow][peekColumn].getShipType() != 'EmptySea') {
-                            empty = false;
-                        }
-                        peekColumn++;
-                    }
-                    // todocatch (ArrayIndexOutOfBoundsException aoobe) {
-                    catch (e) {
-                        //might be at the edge, increment anyway
-                        peekColumn++;
-                    }
-                }
-                peekColumn = column - 1;
-                peekRow++;
-            }
-            //catch (ArrayIndexOutOfBoundsException aoobe) {
-            catch (e) {
-                //might be at the edge, increment anyway
-                peekRow++;
-            }
-        }
-    }
-    else {
-        //vertical
-        while (peekRow < row + length + 1) {
-            try {
-                while (peekColumn < column + 2) {
-                    try {
-                        if (ships[peekRow][peekColumn].getShipType() != 'EmptySea') {
-                            empty = false;
-                        }
-                        peekColumn++;
-                    }
-                    //catch (ArrayIndexOutOfBoundsException aoobe) {
-                    catch (e) {
-                        //might be at the edge, increment anyway
-                        peekColumn++;
-                    }
-                }
-                peekColumn = column - 1;
-                peekRow++;
-            }
-            //catch (Exception ex) {
-            catch (e) {
-                //might be at the edge, increment anyway
-                peekRow++;
-            }
-        }
-    }
-    return empty;
-}
-
-TrisCorp.BattleShips.Ship.prototype.placeOnBoard = function(row, column, horizontal, ocean) {
-    //todo Ship[][] ships = ocean.getShipArray()
-
-    this.setBowRow(row);
-    this.setBowColumn(column);
-
-    for (var i = 0; i < this.getLength(); i++) {
-        if (horizontal) {
-            ships[row][column + i] = this;
-        } else {
-            ships[row + i][column] = this;
-        }
-    }
-}
-
-TrisCorp.BattleShips.Ship.prototype.shootAt = function(row, column) {
-  //if row and column part of ship
-  directHit = false
-
-  if (this.horizontal) {
-      for (var i = 0; i < this.getLength(); i++) {
-          if ((this.bowRow == row) && (this.bowColumn + i == column)) {
-              directHit = true;
-              this.hit[i] = true;
-          }
-      }
-  } else {
-      for (var i = 0; i < this.getLength(); i++) {
-          if ((this.bowRow + i == row) && (this.bowColumn == column)) {
-              directHit = true;
-              this.hit[i] = true;
-          }
-      }
-  }
-  this.setSunk(determineIfShipIsSunk());
-  return directHit;
-}
-
+/***************end of TrisCopr.BattleShips.Ship */
 
 
 
@@ -236,7 +241,7 @@ TrisCorp.BattleShips.BattleShip = function() {
     this.hit = [false,false,false,false];
     this.string = "B";
 };
-debugger;
+
 TrisCorp.BattleShips.BattleShip.prototype = Object.create(TrisCorp.BattleShips.Ship.prototype);
 TrisCorp.BattleShips.BattleShip.prototype.constructor = TrisCorp.BattleShips.BattleShip;
 
@@ -282,10 +287,28 @@ TrisCorp.BattleShips.EmptySea = function() {
     this.firedAt = false;
     this.shipType = 'EmptySea';
     this.string = "E";
+
+	this.isSunk = function() {
+        return false;
+    };
+    this.shootAt = function(row,column) {
+        return false;
+    };
+    this.isSunk = function() {
+        return false;
+    };
+    this.getFiredAt = function() { //can lose this when refactoring
+        return this.firedAt;
+    };
+    this.setFiredAt = function() { //can lose this when refactoring
+        this.firedAt = true;
+    };
+
 };
 TrisCorp.BattleShips.EmptySea.prototype = Object.create(TrisCorp.BattleShips.Ship.prototype);
 TrisCorp.BattleShips.EmptySea.prototype.constructor = TrisCorp.BattleShips.Submarine;
-TrisCorp.BattleShips.EmptySea.prototype.isSunk = function() {
+//moving for scope visibility rules internally to the emptysea object
+/*TrisCorp.BattleShips.EmptySea.prototype.isSunk = function() {
     return false;
 }
 TrisCorp.BattleShips.EmptySea.prototype.shootAt = function(row,column) {
@@ -299,7 +322,7 @@ TrisCorp.BattleShips.EmptySea.prototype.getFiredAt = function() { //can lose thi
 }
 TrisCorp.BattleShips.EmptySea.prototype.setFiredAt = function() { //can lose this when refactoring
     this.firedAt = true;
-}
+}*/
 
 
 
