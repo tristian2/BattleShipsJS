@@ -22,13 +22,47 @@
     <h1>BattleShips</h1>
     <h2>port from a <em>GROOVY</em> implementation</h2>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    < script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></ script >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    < script src="js/bootstrap.min.js">< /script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="js/Namespaces.js"></script>
     <script src="js/Ships.js"></script>
     <script src="js/Ocean.js"></script>
     <script src="js/Game.js"></script>
     <div>Original code at <a href="https://github.com/tristian2/BattleShips">github.com/tristian2/BattleShips</a></div>
+    <div id="playArea">
+      <div id="status"/>
+      <div id="board" style="width: 500px;margin: auto;border: 3px solid #73AD21;height:100px;"></div>
+      <div id="selectors">
+        <select id="row">
+          <option>0</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+        </select>
+        <select id="column">
+          <option>0</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+        </select>
+      </div>
+      <div id="controls">
+        <input type="button" value="reset"/>
+        <input type="button" value="fire" onclick="fire($('#row option:selected').text(),$('#column option:selected').text(),ocean);"/>
+      </div>
+    </div>
   </body>
 </html>
