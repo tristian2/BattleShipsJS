@@ -202,6 +202,7 @@ TrisCorp.BattleShips.Ocean = function() {
       } else {  //assume its an empty sea
           if (ship.getShipType() == "EmptySea") {
               //no need to cast as GROOVY ((EmptySea) ship).setFiredAt()
+              ship.setFiredAt();
           }
       }
       return hit;
