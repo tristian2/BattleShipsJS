@@ -1,30 +1,14 @@
-/*var TrisCorp = TrisCorp || {};
-TrisCorp.BattleShips = TrisCorp.BattleShips || {};
-TrisCorp.BattleShips.Ship = TrisCorp.BattleShips.Ship || {};*/
-
-/**
- @constructor
- @abstract
- */
 TrisCorp.BattleShips.Ship = function() {
     if (this.constructor === TrisCorp.BattleShips.Ship) {
       throw new Error("Can't instantiate abstract class!");
     }
-    // TrisCorp.BattleShips.Ship initialization...
-    //this.length = 0;
+
     this.bowRow = 0;
     this.bowColumn = 0;
     this.horizontal = false;
     this.symbol = null;
     this.hit = [false,false,false,false];
     this.sunk = false;
-    //this.shipType = null; //not needed
-    /* error getShipType: function() {
-        return this.shipType;
-    }*/
-
-    /* abstract Ship class***********************/
-
     this.isSunk = function() {
         return this.sunk;
     };
@@ -59,10 +43,10 @@ TrisCorp.BattleShips.Ship = function() {
         return this.hit;
     };
     this.determineIfShipIsSunk = function() {
-        //todo
-        var length = this.getLength()-1;
-        //todo sunk = this.hit[0..length].every();
-        return this.sunk;
+        function isSunk(element, index, array) {
+          return element;
+        };
+        return this.hit.every(isSunk);
     };
     this.toString = function() {
         return this.string;
@@ -71,13 +55,13 @@ TrisCorp.BattleShips.Ship = function() {
         this.setHorizontal(horizontal);
         var placed = false;
         while (!placed) {
-            var valid = this.okToPlaceShipAt(row, column, horizontal, ocean); //todo
+            var valid = this.okToPlaceShipAt(row, column, horizontal, ocean);
             if (valid) {
-              this.placeOnBoard(row, column, horizontal, ocean); //todo
+              this.placeOnBoard(row, column, horizontal, ocean);
               placed = true;
             } else {
-              row = ocean.aRandomRow(horizontal, this.getLength(), ocean); //todo
-              column = ocean.aRandomColumn(horizontal, this.getLength(), ocean); //todo
+              row = ocean.aRandomRow(horizontal, this.getLength(), ocean);
+              column = ocean.aRandomColumn(horizontal, this.getLength(), ocean);
             }
         }
     };
@@ -86,7 +70,6 @@ TrisCorp.BattleShips.Ship = function() {
 
         if (ocean.getFirstShip()) {
             ocean.setFirstShip(false);
-            return valid;
         }
 
         if (!this.isEmpty(row, column, horizontal, ocean)) {
@@ -94,7 +77,6 @@ TrisCorp.BattleShips.Ship = function() {
             return valid;
         }
 
-        //Ship[][] ships = ocean.getShipArray() //todo
         ships = ocean.shipsBoard;
 
         for (var i = 0; i < this.getLength(); i++) {
@@ -122,7 +104,6 @@ TrisCorp.BattleShips.Ship = function() {
     };
 
     this.isEmpty = function(row, column, horizontal, ocean) {
-        //todo Ship[][] ships = ocean.getShipArray()
         ships = ocean.shipsBoard;
         length = this.getLength();
         empty = true;
@@ -139,18 +120,14 @@ TrisCorp.BattleShips.Ship = function() {
                             }
                             peekColumn++;
                         }
-                        // todocatch (ArrayIndexOutOfBoundsException aoobe) {
                         catch (e) {
-                            //might be at the edge, increment anyway
                             peekColumn++;
                         }
                     }
                     peekColumn = column - 1;
                     peekRow++;
                 }
-                //catch (ArrayIndexOutOfBoundsException aoobe) {
                 catch (e) {
-                    //might be at the edge, increment anyway
                     peekRow++;
                 }
             }
@@ -166,18 +143,14 @@ TrisCorp.BattleShips.Ship = function() {
                             }
                             peekColumn++;
                         }
-                        //catch (ArrayIndexOutOfBoundsException aoobe) {
                         catch (e) {
-                            //might be at the edge, increment anyway
                             peekColumn++;
                         }
                     }
                     peekColumn = column - 1;
                     peekRow++;
                 }
-                //catch (Exception ex) {
                 catch (e) {
-                    //might be at the edge, increment anyway
                     peekRow++;
                 }
             }
@@ -186,11 +159,9 @@ TrisCorp.BattleShips.Ship = function() {
     };
 
     this.placeOnBoard = function(row, column, horizontal, ocean) {
-        //todo Ship[][] ships = ocean.getShipArray()
         ships = ocean.shipsBoard;
         this.setBowRow(row);
         this.setBowColumn(column);
-
         for (var i = 0; i < this.getLength(); i++) {
             if (horizontal) {
                 ships[row][column + i] = this;
@@ -201,9 +172,7 @@ TrisCorp.BattleShips.Ship = function() {
     };
 
     this.shootAt = function(row, column) {
-        //if row and column part of ship
         directHit = false;
-
         if (this.horizontal) {
             for (var i = 0; i < this.getLength(); i++) {
                 if ((this.bowRow == row) && (this.bowColumn + i == column)) {
@@ -224,15 +193,7 @@ TrisCorp.BattleShips.Ship = function() {
     };
 
 };
-/***************end of TrisCopr.BattleShips.Ship */
 
-
-
-
-
-
-//new TrisCorp.BattleShips.Ship(); // throws Uncaught Error: Can't instantiate abstract class!(…)
-/* BattleShip class ***********************/
 TrisCorp.BattleShips.BattleShip = function() {
     TrisCorp.BattleShips.Ship.apply(this, arguments);
     // TrisCorp.BattleShips.BattleShip initialization...
@@ -307,57 +268,3 @@ TrisCorp.BattleShips.EmptySea = function() {
 };
 TrisCorp.BattleShips.EmptySea.prototype = Object.create(TrisCorp.BattleShips.Ship.prototype);
 TrisCorp.BattleShips.EmptySea.prototype.constructor = TrisCorp.BattleShips.Submarine;
-//moving for scope visibility rules internally to the emptysea object
-/*TrisCorp.BattleShips.EmptySea.prototype.isSunk = function() {
-    return false;
-}
-TrisCorp.BattleShips.EmptySea.prototype.shootAt = function(row,column) {
-    return false;
-}
-TrisCorp.BattleShips.EmptySea.prototype.isSunk = function() {
-    return false;
-}
-TrisCorp.BattleShips.EmptySea.prototype.getFiredAt = function() { //can lose this when refactoring
-    return this.firedAt;
-}
-TrisCorp.BattleShips.EmptySea.prototype.setFiredAt = function() { //can lose this when refactoring
-    this.firedAt = true;
-}*/
-
-
-
-
-
-/*usage
-var cruiser = new TrisCorp.BattleShips.Cruiser();
-var battleship = new TrisCorp.BattleShips.BattleShip();
-var destroyer = new TrisCorp.BattleShips.Destroyer();
-var submarine = new TrisCorp.BattleShips.Submarine();
-console.log("ship type: "+ battleship.getShipType());
-console.log('length: '+battleship.getLength());
-console.log('string: '+battleship.toString());
-console.log('hit array: '+battleship.hit);
-console.log("ship type: "+ cruiser.getShipType());
-console.log('string: '+ cruiser.toString());
-console.log('length: '+cruiser.getLength());
-console.log('hit array: '+cruiser.hit);  //this shows that we dont actually need accessors in JS
-
-console.log("ship type: "+ submarine.getShipType());
-console.log('string: '+ submarine.toString());
-console.log('length: '+ submarine.getLength());
-console.log('hit array: '+ submarine.hit);  //this shows that we dont actually need accessors in JS
-
-console.log("ship type: "+ destroyer.getShipType());
-console.log('string: '+ destroyer.toString());
-console.log('length: '+ destroyer.getLength());
-console.log('hit array: '+ destroyer.hit);  //this shows that we dont actually need accessors in JS
-
-var emptySea = new TrisCorp.BattleShips.EmptySea();
-console.log("ship type: "+ emptySea.getShipType());
-console.log('length: '+ emptySea.getLength());
-console.log('string: '+ emptySea.toString());
-console.log('hit array: '+ emptySea.hit);
-console.log("shootAt: "+ emptySea.shootAt());
-console.log('sunk: '+ emptySea.isSunk());
-console.log('FiredAt: '+ emptySea.getFiredAt());
-*/

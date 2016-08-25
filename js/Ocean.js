@@ -1,16 +1,10 @@
-/**
- @constructor
- @abstract
- */
 TrisCorp.BattleShips.Ocean = function() {
-    // TrisCorp.BattleShips.Ship initialization...
     var oceanObject = this;
     this.upperBoardBound = 10;
     this.shipsBoard = new Array();
     for (var row=0;row<this.upperBoardBound;row++) {
       var shipsColumn = new Array();
       for (var column=0;column<this.upperBoardBound;column++) {
-        //shipsColumn.push(new TrisCorp.BattleShips.Ship());
         shipsColumn.push(new TrisCorp.BattleShips.EmptySea());
       }
       this.shipsBoard.push(shipsColumn);
@@ -20,12 +14,7 @@ TrisCorp.BattleShips.Ocean = function() {
     this.shotsFired = 0;
     this.shipsSunk = 0;
     this.hitCount = 0;
-    this.assignEmptySeaIndicesToShipArray = function() {
-      console.log("assignEmptySeaIndicesToShipArray todo");
-    }
-
     this.isOccupied = function(row,col,ocean) {
-      //todo
       var ships = ocean.shipsBoard;
       return ships[row][col].getShipType() != 'EmptySea';
     };
@@ -37,22 +26,6 @@ TrisCorp.BattleShips.Ocean = function() {
         return this.hitCount;
     };
     this.getShipsSunk = function() {
-
-      //to consider
-        //ShipComparator shipComparator = new ShipComparator()
-        //def uniqueShips = ships.flatten().toList()
-        //int shipsSunk = 0
-
-        /*uniqueShips.unique(shipComparator).each {
-            it.each {
-                if (it.isSunk()) {
-                    shipsSunk++
-                }
-            }
-        }*/
-
-        //return shipsSunk
-
     };
     this.isGameOver = function() {
         var gameOver = false;
@@ -79,7 +52,6 @@ TrisCorp.BattleShips.Ocean = function() {
     };  //or
 
     this.toString = function() {
-        //return this.formatBoardForConsole(ocean);
         return this.formatBoardForConsole(oceanObject);
     };
 
@@ -92,7 +64,7 @@ TrisCorp.BattleShips.Ocean = function() {
       }
       return randomColumn;
     };
-//duplicated from splaceAllshipsrandomlyscope refactor later
+    //duplicated from splaceAllshipsrandomlyscope refactor later
     this.aRandomRow = function (horizontal, length, ocean) {
       if (horizontal) {
         randomRow = ocean.getRandomIntInclusive(0,9);
@@ -101,7 +73,7 @@ TrisCorp.BattleShips.Ocean = function() {
       }
       return randomRow;
     };
-//duplicated from splaceAllshipsrandomlyscope refactor later
+    //duplicated from splaceAllshipsrandomlyscope refactor later
     this.getRandomIntInclusive = function (min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);
@@ -190,7 +162,7 @@ TrisCorp.BattleShips.Ocean = function() {
                 }
                 return randomColumn;
               }
-//for now duplicate in the parent scope - sort later
+              //for now duplicate in the parent scope - sort later
               function aRandomRow(horizontal, length, ocean) {
                 if (horizontal) {
                   randomRow = getRandomIntInclusive(0,9);
@@ -203,7 +175,7 @@ TrisCorp.BattleShips.Ocean = function() {
               function aRandomBool() {
                 return Math.random()<.5;
               }
-//for now duplicate in the parent scope - sort later
+              //for now duplicate in the parent scope - sort later
               function getRandomIntInclusive(min, max) {
                 min = Math.ceil(min);
                 max = Math.floor(max);
@@ -211,20 +183,14 @@ TrisCorp.BattleShips.Ocean = function() {
               }
           }
 
-
-
-
-
           //see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
           ships.forEach(loopThrUShipTypes);
     };
 
-
-
     this.shootAt = function(row,column,ocean) {
       var hit = false;
       ocean.setShotsFired();
-      var ships = ocean.shipsBoard;// ships[row][column]
+      var ships = ocean.shipsBoard;// equiv ships[row][column]
       var ship = ships[row][column];
       if (ocean.isOccupied(row,column,ocean)) {
         if (!ship.isSunk()) {
@@ -235,97 +201,29 @@ TrisCorp.BattleShips.Ocean = function() {
         }
       } else {  //assume its an empty sea
           if (ship.getShipType() == "EmptySea") {
-              //((EmptySea) ship).setFiredAt()
+              //no need to cast as GROOVY ((EmptySea) ship).setFiredAt()
           }
       }
       return hit;
     };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     this.formatBoardForConsole = function(oceanObject) {
-        var s = "  0 1 2 3 4 5 6 7 8 9 \n ";
+        //basic renderer
+
         console.log('format board');
 
         ships.map( function(e,i) {
-
           e.map( function(ee,j) {
-            //console.log("row:"+i + " col:"+j+" "+ee + " "+ocean.getSymbolForShipState());
             console.log("row:"+i + " col:"+j+" "+ee + " "+oceanObject.getSymbolForShipState(ee,i,j));
             s+=oceanObject.getSymbolForShipState(ee,i,j);
-            //console.log(this.getSymbolForShipState(ee));
-            //console.log(ee);
           })
         });
-
-        //var rows = ships.map( function(e,i){
-        //  return i%this.upperBoardBound===0 ? arr.slice(i,i+this.upperBoardBound) : null;
-        //}).filter(function(e) { return e;});
-        //console.log(rows.toString());
-
-        /*
-        ships.eachWithIndex {
-            rowObject, row ->
-            rowObject.eachWithIndex {
-                objValue, col ->
-                sb1.append('+-')
-            }
-            sb1.append("+\n" + row)
-            rowObject.eachWithIndex {
-                objValue, col ->
-                Ship ship = ships[row][col]
-                sb1.append('+' + this.getSymbolForShipState(ship, row, col))
-            }
-            sb1.append("|\n ")
-
-        }
-
-        sb1.append('+-+-+-+-+-+-+-+-+-+-+\n')
-        return sb1*/
-        return s;
-
+        return s.replace(/(..........)/g, "$1<br />");
     }
 
     this.getSymbolForShipState = function(ship,row,col) {
-      //debugger;
+
       var replacementSymbolFragment = '.';
       if (ship.getShipType() == "EmptySea") {    //is it emptysea? is it hit?  then show - no? then show .
           if (ship.getFiredAt())
@@ -351,7 +249,7 @@ TrisCorp.BattleShips.Ocean = function() {
     }
 
     this.showBlankBoard = function() {
-        /*StringBuilder sb1 = new StringBuilder()
+        /*todo StringBuilder sb1 = new StringBuilder()
         (1..10).each {
             sb1.append('+-+-+-+-+-+-+-+-+-+-+\n')
             sb1.append('| | | | | | | | | | |\n')
@@ -361,23 +259,3 @@ TrisCorp.BattleShips.Ocean = function() {
         return sb1*/
     };
 };
-
-
-
-//see second prototype in this doc http://alistapart.com/article/getoutbindingsituations
-/*also move these internally for sciope reasons
-TrisCorp.BattleShips.Ocean.prototype = {
-  getShipArray: function() {
-        console.log("this ships array:" + this.shipsBoard);
-        return this.shipsBoard;
-  },
-  assignEmptySeaIndicesToShipArray: function() {
-    console.log("assignEmptySeaIndicesToShipArray todo");
-  }
-};*/
-
-//thought 1 groovy auto magically provides getters/setters, in js it's DIY
-/*thought 2 is well move this internally for scope visibility reasons
-TrisCorp.BattleShips.Ocean.prototype.getFirstShip = function() {
-  return this.firstShip;
-};*/
