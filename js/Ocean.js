@@ -210,7 +210,7 @@ TrisCorp.BattleShips.Ocean = function() {
 
     this.formatBoardForConsole = function(oceanObject) {
         //basic renderer
-        var s;
+        var s ="";
         console.log('format board');
 
         ships.map( function(e,i) {
