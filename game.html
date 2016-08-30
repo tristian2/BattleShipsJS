@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>BattleShips port</title>
+    <title>BattleShips Port</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -16,29 +16,12 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <style>
-      #board{
-        width:100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        font-family:  "Lucida Console", Monaco, monospace;
-        font-size: 1.56vw; /* The text overflows in safari using (int)2 */
-        white-space: nowrap;
-        overflow-x:hidden;
-
-        /* styling */
-        background:#09f;
-        min-height: 100px;
-        margin-bottom: 30px;
-        line-height:1;
-      }
-  </style>
+    <link rel="stylesheet" type="text/css" href="css/game.css"/>
   </head>
-  <body>
+  <body onload="initialise()">
 
     <h1>BattleShips</h1>
-    <h2>port from a <em>GROOVY</em> implementation</h2>
+    <h2>Ported from a <em>GROOVY</em> implementation</h2>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -50,8 +33,11 @@
     <div>Original code at <a href="https://github.com/tristian2/BattleShips">github.com/tristian2/BattleShips</a></div>
     <div>Ported code at <a href="https://github.com/tristian2/BattleShipsJS">github.com/tristian2/BattleShipsJS</a></div>
     <div id="playArea">
-      <div id="status"/>
-      <div id="board" style="width: 260px;margin: auto;border: 3px solid #73AD21;height:405px;">..........<br>..........<br>..........<br>..........<br>..........<br>..........<br>..........<br>..........<br>..........<br>..........<br></div>
+
+      <div id="board"></div>
+      <div id="status"></div>
+      <div id="fireStatus"></div>
+      <div id="score"></div>
       <div id="selectors">
         <select id="row">
           <option>0</option>
@@ -79,7 +65,7 @@
         </select>
       </div>
       <div id="controls">
-        <input type="button" value="reset"/>
+        <input type="button" value="reset" onclick="initialise();"/>
         <input type="button" value="fire" onclick="fire($('#row option:selected').text(),$('#column option:selected').text(),ocean);"/>
       </div>
     </div>

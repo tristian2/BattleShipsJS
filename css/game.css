@@ -1,0 +1,19 @@
+#board{
+  width:100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  font-family:  "Lucida Console", Monaco, monospace;
+  font-size: 1.56vw; /* The text overflows in safari using (int)2 */
+  white-space: nowrap;
+  overflow-x:hidden;
+
+  background:#09f;
+  min-height: 100px;
+  margin-bottom: 30px;
+  line-height:1;
+  width: 260px;
+  margin: auto;
+  border: 3px solid #000000;
+  height:405px;
+}

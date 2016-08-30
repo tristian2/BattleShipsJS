@@ -26,10 +26,20 @@ TrisCorp.BattleShips.Ocean = function() {
         return this.hitCount;
     };
     this.getShipsSunk = function() {
+      var shipsSunk = 0;
+      //unique objects in ships
+      for (var row=0;row<10;row++) {
+       for (var column=0;column<10;column++) {
+          console.log(ships[row][column].sunk);
+          if (ships[row][column].sunk)
+            shipsSunk++;
+        }
+      }
+      return shipsSunk;
     };
     this.isGameOver = function() {
         var gameOver = false;
-        if (this.getShipsSunk() == 10);
+        if (this.getShipsSunk() == 20)
             gameOver = true;
         return gameOver;
     };
