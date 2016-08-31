@@ -1,3 +1,9 @@
 // Place your settings in this file to overwrite default and user settings.
 {
+    // The proxy setting to use. If not set will be taken from the http_proxy and https_proxy environment variables
+    "http.proxy": "http://pac.webdefence.global.blackspider.com/proxy.pac?p=99r4m7pw",
+    "https.proxy": "http://pac.webdefence.global.blackspider.com/proxy.pac?p=99r4m7pw",
+
+    // Whether the proxy server certificate should be verified against the list of supplied CAs.
+    "http.proxyStrictSSL": true
 }
